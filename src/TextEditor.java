@@ -1,6 +1,11 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.File;
+import java.io.FileWriter;
 
 public class TextEditor implements ActionListener {
     JFrame frame;
@@ -75,12 +80,51 @@ public class TextEditor implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == newFile){
+            TextEditor newTextEditor = new TextEditor();
+        }
+        if(e.getSource()==openFile){
+            if(e.getSource()==openFile){
+                JFileChooser fileChooser = new JFileChooser("C:");
+                int chooseOption = fileChooser.showOpenDialog(null);
+
+                if(chooseOption== JFileChooser.APPROVE_OPTION){
+                    File file  = fileChooser.getSelectedFile();
+                    String filePath = file.getPath();
+                    try {
+                        BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
+                        String intermediate = "", output = "";
+                        while((intermediate = bufferedReader.readLine())!=null){
+                            output += intermediate+ "\n";
+                        }
+                        textArea.setText(output);
+
+                    }catch (Exception exception){
+                        System.out.println(exception);
+                    }
+                }
+            }
 
         }
-        if(e.getSource() == openFile){
+        if(e.getSource()==saveFile){
+            if(e.getSource()==saveFile){
+                JFileChooser fileChooser = new JFileChooser("C:");
+                fileChooser.setApproveButtonText("Save");
+                int chooseOption = fileChooser.showSaveDialog(null);
 
-        }
-        if(e.getSource() == saveFile){
+
+                if(chooseOption== JFileChooser.APPROVE_OPTION){
+                    File file = new File(fileChooser.getSelectedFile().getAbsolutePath()+".txt");
+                    String filePath = file.getPath();
+                    try{
+                        BufferedWriter outfile = null;
+                        outfile = new BufferedWriter(new FileWriter(file));
+                        textArea.write(outfile);
+                        outfile.close();
+                    }catch (Exception exception){
+                        System.out.println(exception);
+                    }
+                }
+            }
 
         }
         if(e.getSource() == cut){
